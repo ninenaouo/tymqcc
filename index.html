@@ -6,6 +6,7 @@
   <title>DISC 快速測驗</title>
   <style>
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font-family: "Segoe UI", "Noto Sans TC", sans-serif;
@@ -13,23 +14,35 @@
       color: #1f2937;
       line-height: 1.6;
     }
+
     .wrap {
-      max-width: 900px;
+      max-width: 920px;
       margin: 32px auto;
       padding: 20px;
     }
+
     .card {
       background: #fff;
       border-radius: 18px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
       padding: 24px;
       margin-bottom: 20px;
     }
-    h1, h2 { margin-top: 0; }
+
+    h1, h2 {
+      margin-top: 0;
+    }
+
     .desc {
       color: #4b5563;
       margin-bottom: 16px;
     }
+
+    .hint {
+      color: #6b7280;
+      font-size: 14px;
+    }
+
     .question {
       padding: 18px;
       border: 1px solid #e5e7eb;
@@ -37,14 +50,17 @@
       margin-bottom: 14px;
       background: #fcfcfd;
     }
+
     .question h3 {
       margin: 0 0 12px;
       font-size: 18px;
     }
+
     .options {
       display: grid;
       gap: 10px;
     }
+
     label.option {
       display: block;
       padding: 12px 14px;
@@ -54,19 +70,23 @@
       transition: 0.2s ease;
       background: #fff;
     }
+
     label.option:hover {
       border-color: #94a3b8;
       background: #f8fafc;
     }
+
     input[type="radio"] {
       margin-right: 10px;
     }
+
     .btns {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
       margin-top: 20px;
     }
+
     button {
       border: none;
       border-radius: 12px;
@@ -75,19 +95,29 @@
       cursor: pointer;
       transition: 0.2s ease;
     }
+
     .primary {
       background: #2563eb;
       color: white;
     }
-    .primary:hover { background: #1d4ed8; }
+
+    .primary:hover {
+      background: #1d4ed8;
+    }
+
     .ghost {
       background: #e5e7eb;
       color: #111827;
     }
-    .ghost:hover { background: #d1d5db; }
+
+    .ghost:hover {
+      background: #d1d5db;
+    }
+
     .result {
       display: none;
     }
+
     .type-badge {
       display: inline-block;
       padding: 8px 14px;
@@ -97,58 +127,73 @@
       background: #111827;
       color: #fff;
     }
+
     .score-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 12px;
       margin: 16px 0;
     }
+
     .score-box {
       background: #f3f4f6;
       border-radius: 14px;
       padding: 14px;
       text-align: center;
     }
+
     .score-box strong {
       display: block;
       font-size: 26px;
       margin-top: 6px;
     }
+
     .bar-wrap {
       margin-top: 16px;
       display: grid;
       gap: 10px;
     }
+
     .bar-row {
       display: grid;
       grid-template-columns: 40px 1fr 56px;
       align-items: center;
       gap: 10px;
     }
+
     .bar {
       height: 14px;
       background: #e5e7eb;
       border-radius: 999px;
       overflow: hidden;
     }
+
     .bar > span {
       display: block;
       height: 100%;
       width: 0;
       border-radius: 999px;
+      transition: width 0.4s ease;
     }
+
     .d { background: #ef4444; }
     .i { background: #f59e0b; }
     .s { background: #10b981; }
     .c { background: #3b82f6; }
-    .hint {
-      color: #6b7280;
-      font-size: 14px;
-    }
+
     @media (max-width: 640px) {
-      .score-grid { grid-template-columns: repeat(2, 1fr); }
-      .wrap { margin: 16px auto; padding: 12px; }
-      .card { padding: 16px; }
+      .score-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .wrap {
+        margin: 16px auto;
+        padding: 12px;
+      }
+
+      .card {
+        padding: 16px;
+      }
     }
   </style>
 </head>
@@ -156,7 +201,9 @@
   <div class="wrap">
     <div class="card">
       <h1>DISC 快速測驗</h1>
-      <p class="desc">每題選擇一個最像你的選項。全部作答後按下「查看結果」，系統會自動計算你的 DISC 傾向。</p>
+      <p class="desc">
+        每題選擇一個最像你的選項。全部作答後按下「查看結果」，系統會自動計算你的 DISC 傾向。
+      </p>
       <p class="hint">D = 主導型、I = 影響型、S = 穩定型、C = 謹慎型</p>
     </div>
 
@@ -175,10 +222,26 @@
       </div>
 
       <div class="bar-wrap">
-        <div class="bar-row"><span>D</span><div class="bar"><span id="barD" class="d"></span></div><span id="pctD">0%</span></div>
-        <div class="bar-row"><span>I</span><div class="bar"><span id="barI" class="i"></span></div><span id="pctI">0%</span></div>
-        <div class="bar-row"><span>S</span><div class="bar"><span id="barS" class="s"></span></div><span id="pctS">0%</span></div>
-        <div class="bar-row"><span>C</span><div class="bar"><span id="barC" class="c"></span></div><span id="pctC">0%</span></div>
+        <div class="bar-row">
+          <span>D</span>
+          <div class="bar"><span id="barD" class="d"></span></div>
+          <span id="pctD">0%</span>
+        </div>
+        <div class="bar-row">
+          <span>I</span>
+          <div class="bar"><span id="barI" class="i"></span></div>
+          <span id="pctI">0%</span>
+        </div>
+        <div class="bar-row">
+          <span>S</span>
+          <div class="bar"><span id="barS" class="s"></span></div>
+          <span id="pctS">0%</span>
+        </div>
+        <div class="bar-row">
+          <span>C</span>
+          <div class="bar"><span id="barC" class="c"></span></div>
+          <span id="pctC">0%</span>
+        </div>
       </div>
     </div>
   </div>
@@ -188,109 +251,118 @@
       {
         text: "面對新任務時，我通常會...",
         options: [
+          ["先蒐集資料與規則，確認沒問題再開始", "C"],
           ["先直接開始做，邊做邊修正", "D"],
-          ["找人一起討論，讓氣氛熱起來", "I"],
           ["先確認大家能否配合，再穩定推進", "S"],
-          ["先蒐集資料與規則，確認沒問題再開始", "C"]
+          ["找人一起討論，讓氣氛熱起來", "I"]
         ]
       },
       {
         text: "在團隊中，我比較常扮演...",
         options: [
-          ["決定方向的人", "D"],
+          ["把關細節的人", "C"],
           ["帶動氣氛的人", "I"],
-          ["支持與協助的人", "S"],
-          ["把關細節的人", "C"]
+          ["決定方向的人", "D"],
+          ["支持與協助的人", "S"]
         ]
       },
       {
         text: "遇到衝突時，我傾向...",
         options: [
-          ["直接攤開來講，快速解決", "D"],
-          ["先緩和氣氛，再慢慢溝通", "I"],
           ["希望彼此不要太僵，盡量和諧", "S"],
-          ["先釐清事實與責任，再處理", "C"]
+          ["先釐清事實與責任，再處理", "C"],
+          ["直接攤開來講，快速解決", "D"],
+          ["先緩和氣氛，再慢慢溝通", "I"]
         ]
       },
       {
         text: "別人通常會覺得我...",
         options: [
-          ["果斷、有主見", "D"],
           ["外向、好相處", "I"],
+          ["認真、細心", "C"],
           ["穩重、可靠", "S"],
-          ["認真、細心", "C"]
+          ["果斷、有主見", "D"]
         ]
       },
       {
         text: "我做決策時較重視...",
         options: [
-          ["結果與效率", "D"],
-          ["感受與互動", "I"],
           ["穩定與一致", "S"],
-          ["正確與依據", "C"]
+          ["結果與效率", "D"],
+          ["正確與依據", "C"],
+          ["感受與互動", "I"]
         ]
       },
       {
         text: "工作節奏上，我偏好...",
         options: [
-          ["快節奏、挑戰高", "D"],
           ["多互動、有變化", "I"],
-          ["平穩、有規律", "S"],
-          ["有標準、可控制", "C"]
+          ["有標準、可控制", "C"],
+          ["快節奏、挑戰高", "D"],
+          ["平穩、有規律", "S"]
         ]
       },
       {
         text: "當被交辦重要事情時，我會先...",
         options: [
+          ["檢查細節與風險", "C"],
           ["抓重點，先往前推", "D"],
           ["找人確認想法與資源", "I"],
-          ["確認流程與分工是否順暢", "S"],
-          ["檢查細節與風險", "C"]
+          ["確認流程與分工是否順暢", "S"]
         ]
       },
       {
         text: "我最不能接受的是...",
         options: [
-          ["效率太差、一直拖延", "D"],
+          ["錯誤百出、沒有標準", "C"],
           ["氣氛沉悶、互動冷淡", "I"],
           ["變動太多、沒有安全感", "S"],
-          ["錯誤百出、沒有標準", "C"]
+          ["效率太差、一直拖延", "D"]
         ]
       },
       {
         text: "我比較喜歡的主管風格是...",
         options: [
-          ["授權清楚、目標明確", "D"],
-          ["鼓勵支持、互動開放", "I"],
           ["溫和穩定、願意傾聽", "S"],
-          ["邏輯清楚、要求明確", "C"]
+          ["授權清楚、目標明確", "D"],
+          ["邏輯清楚、要求明確", "C"],
+          ["鼓勵支持、互動開放", "I"]
         ]
       },
       {
         text: "如果要做簡報，我最在意...",
         options: [
-          ["能不能快速說服別人", "D"],
+          ["資料是否正確完整", "C"],
           ["現場互動與感染力", "I"],
           ["內容讓大家容易理解", "S"],
-          ["資料是否正確完整", "C"]
+          ["能不能快速說服別人", "D"]
         ]
       },
       {
         text: "我對變化的態度比較像...",
         options: [
-          ["越有挑戰越好", "D"],
           ["有趣就願意試試", "I"],
-          ["希望循序漸進適應", "S"],
-          ["需要先確認風險與規則", "C"]
+          ["需要先確認風險與規則", "C"],
+          ["越有挑戰越好", "D"],
+          ["希望循序漸進適應", "S"]
         ]
       },
       {
         text: "整體來說，我最像...",
         options: [
-          ["帶頭衝的人", "D"],
-          ["帶動大家的人", "I"],
+          ["精準把關的人", "C"],
           ["默默支撐的人", "S"],
-          ["精準把關的人", "C"]
+          ["帶動大家的人", "I"],
+          ["帶頭衝的人", "D"]
+        ]
+      },
+      {
+        text: "當計畫進行到一半，突然出現變數時，我通常會...",
+        options: [
+          ["先確認規則、條件與可能風險", "C"],
+          ["先安撫大家情緒，再一起調整", "I"],
+          ["快速重新決定方向並推進", "D"],
+          ["先維持既有秩序，再穩定修正", "S"]
         ]
       }
     ];
@@ -318,24 +390,26 @@
     const resultBox = document.getElementById("result");
 
     function renderQuestions() {
-      form.innerHTML = questions.map((q, qi) => `
-        <div class="question">
-          <h3>${qi + 1}. ${q.text}</h3>
-          <div class="options">
-            ${q.options.map((opt, oi) => `
-              <label class="option">
-                <input type="radio" name="q${qi}" value="${opt[1]}" />
-                ${opt[0]}
-              </label>
-            `).join("")}
+      form.innerHTML =
+        questions.map((q, qi) => `
+          <div class="question">
+            <h3>${qi + 1}. ${q.text}</h3>
+            <div class="options">
+              ${q.options.map((opt, oi) => `
+                <label class="option" for="q${qi}_${oi}">
+                  <input type="radio" id="q${qi}_${oi}" name="q${qi}" value="${opt[1]}" />
+                  ${opt[0]}
+                </label>
+              `).join("")}
+            </div>
           </div>
-        </div>
-      `).join("") + `
-        <div class="btns">
-          <button type="button" class="primary" onclick="calculateDISC()">查看結果</button>
-          <button type="reset" class="ghost" onclick="resetResult()">重新填寫</button>
-        </div>
-      `;
+        `).join("") +
+        `
+          <div class="btns">
+            <button type="button" class="primary" onclick="calculateDISC()">查看結果</button>
+            <button type="reset" class="ghost" onclick="resetResult()">重新填寫</button>
+          </div>
+        `;
     }
 
     function calculateDISC() {
@@ -351,7 +425,11 @@
       }
 
       const total = questions.length;
-      const topType = Object.keys(scores).sort((a, b) => scores[b] - scores[a])[0];
+
+      const topType = Object.keys(scores).sort((a, b) => {
+        if (scores[b] !== scores[a]) return scores[b] - scores[a];
+        return "DISC".indexOf(a) - "DISC".indexOf(b);
+      })[0];
 
       document.getElementById("scoreD").textContent = scores.D;
       document.getElementById("scoreI").textContent = scores.I;
@@ -366,12 +444,27 @@
 
       document.getElementById("typeBadge").textContent = resultMap[topType].title;
       document.getElementById("typeDesc").textContent = resultMap[topType].desc;
+
       resultBox.style.display = "block";
       resultBox.scrollIntoView({ behavior: "smooth" });
     }
 
     function resetResult() {
       resultBox.style.display = "none";
+      document.getElementById("barD").style.width = "0%";
+      document.getElementById("barI").style.width = "0%";
+      document.getElementById("barS").style.width = "0%";
+      document.getElementById("barC").style.width = "0%";
+      document.getElementById("pctD").textContent = "0%";
+      document.getElementById("pctI").textContent = "0%";
+      document.getElementById("pctS").textContent = "0%";
+      document.getElementById("pctC").textContent = "0%";
+      document.getElementById("scoreD").textContent = "0";
+      document.getElementById("scoreI").textContent = "0";
+      document.getElementById("scoreS").textContent = "0";
+      document.getElementById("scoreC").textContent = "0";
+      document.getElementById("typeBadge").textContent = "";
+      document.getElementById("typeDesc").textContent = "";
     }
 
     renderQuestions();
