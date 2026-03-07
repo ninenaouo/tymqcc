@@ -133,12 +133,18 @@
       display: none;
     }
 
+    .type-badge-wrap {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
     .type-badge {
       display: inline-block;
       padding: 10px 16px;
       border-radius: 999px;
       font-weight: 700;
-      margin-bottom: 14px;
       color: #fff;
       font-size: 18px;
     }
@@ -260,6 +266,12 @@
       margin-bottom: 8px;
     }
 
+    .divider {
+      height: 1px;
+      background: #e5e7eb;
+      margin: 14px 0;
+    }
+
     @media (max-width: 768px) {
       .score-grid,
       .section-grid,
@@ -298,7 +310,8 @@
 
     <div id="result" class="card result">
       <h2>測驗結果</h2>
-      <div id="typeBadge" class="type-badge"></div>
+
+      <div id="typeBadgeWrap" class="type-badge-wrap"></div>
       <p id="typeDesc"></p>
 
       <div class="score-grid">
@@ -372,7 +385,9 @@
         <div class="info-box">
           <h3>整體判讀</h3>
           <p id="mixSummary"></p>
-          <p class="small-note">提醒：DISC 反映的是行為傾向，不代表能力高低，也不是固定不變的人格標籤。</p>
+          <p class="small-note">
+            提醒：DISC 反映的是行為傾向，不代表能力高低，也不是固定不變的人格標籤。
+          </p>
         </div>
       </div>
     </div>
@@ -521,7 +536,7 @@
         ],
         advice: [
           "在推動事情前，先花一點時間確認團隊是否跟得上",
-          "學會把『快』和『穩』搭配，而不是只追求速度",
+          "學會把快和穩搭配，而不是只追求速度",
           "遇到不同意見時，先聽完再判斷，能減少不必要摩擦",
           "多留意細節與風險，能讓執行更完整",
           "把命令改成邀請，會讓團隊更願意配合"
@@ -530,7 +545,7 @@
           "說明事情時可直接、明確，但避免太硬",
           "先講結論，再補充原因，效果通常最好",
           "若對方偏慢或偏保守，請留給對方思考時間",
-          "多用『我們一起怎麼做』，少用單向要求",
+          "多用我們一起怎麼做，少用單向要求",
           "你越願意聽，別人越願意跟"
         ],
         interactions: {
@@ -616,7 +631,7 @@
           "用穩定節奏溝通，是你的強項"
         ],
         interactions: {
-          D: "與 D 型互動時，對方節奏快、要求直接。請不要因壓力而只說『好』，必要時要清楚表達實際情況。",
+          D: "與 D 型互動時，對方節奏快、要求直接。請不要因壓力而只說好，必要時要清楚表達實際情況。",
           I: "與 I 型互動時，對方熱情外放。若你覺得太快，可主動幫忙把想法整理成可執行步驟。",
           S: "與 S 型互動時，合作通常很順，但也可能彼此都太客氣，重要議題要避免都不先說。",
           C: "與 C 型互動時，對方重邏輯與細節。你若能先整理事實，再說明感受，會更有效。"
@@ -692,52 +707,128 @@
         `;
     }
 
-    function getSortedTypes(scores) {
-      return Object.keys(scores).sort((a, b) => {
-        if (scores[b] !== scores[a]) return scores[b] - scores[a];
-        return "DISC".indexOf(a) - "DISC".indexOf(b);
-      });
-    }
-
     function renderList(elementId, items) {
       const el = document.getElementById(elementId);
       el.innerHTML = items.map(item => `<li>${item}</li>`).join("");
     }
 
-    function renderInteractionTips(mainType) {
-      const tips = discData[mainType].interactions;
+    function getSortedScoreEntries(scores) {
+      return Object.entries(scores).sort((a, b) => {
+        if (b[1] !== a[1]) return b[1] - a[1];
+        return "DISC".indexOf(a[0]) - "DISC".indexOf(b[0]);
+      });
+    }
+
+    function getRankGroups(scores) {
+      const entries = getSortedScoreEntries(scores);
+      const uniqueValues = [...new Set(entries.map(entry => entry[1]))];
+      return uniqueValues.map(value => ({
+        score: value,
+        types: entries.filter(entry => entry[1] === value).map(entry => entry[0])
+      }));
+    }
+
+    function formatTypeTitles(types) {
+      return types.map(type => discData[type].title).join("、");
+    }
+
+    function formatPlainTypeNames(types) {
+      return types.map(type => discData[type].title.replace("型", "")).join("、");
+    }
+
+    function renderBadges(types) {
+      const wrap = document.getElementById("typeBadgeWrap");
+      wrap.innerHTML = types.map(type => `
+        <span class="type-badge ${discData[type].badgeClass}">${discData[type].title}</span>
+      `).join("");
+    }
+
+    function mergeUniqueArrays(arrays) {
+      return [...new Set(arrays.flat())];
+    }
+
+    function renderInteractionTips(types) {
+      const merged = { D: [], I: [], S: [], C: [] };
+
+      types.forEach(type => {
+        const interactions = discData[type].interactions;
+        Object.keys(merged).forEach(key => {
+          merged[key].push(interactions[key]);
+        });
+      });
+
       const html = `
         <div class="info-box" style="margin-top: 10px;">
-          <p><span class="highlight">遇到 D 主導型：</span>${tips.D}</p>
-          <p><span class="highlight">遇到 I 影響型：</span>${tips.I}</p>
-          <p><span class="highlight">遇到 S 穩定型：</span>${tips.S}</p>
-          <p><span class="highlight">遇到 C 謹慎型：</span>${tips.C}</p>
+          <p><span class="highlight">遇到 D 主導型：</span>${merged.D.join(" ")}</p>
+          <p><span class="highlight">遇到 I 影響型：</span>${merged.I.join(" ")}</p>
+          <p><span class="highlight">遇到 S 穩定型：</span>${merged.S.join(" ")}</p>
+          <p><span class="highlight">遇到 C 謹慎型：</span>${merged.C.join(" ")}</p>
         </div>
       `;
       document.getElementById("interactionTips").innerHTML = html;
     }
 
-    function renderRoleTags(mainType) {
-      const tags = discData[mainType].roles;
+    function renderRoleTags(types) {
+      const tags = mergeUniqueArrays(types.map(type => discData[type].roles));
       document.getElementById("roleTags").innerHTML = tags
         .map(tag => `<span class="tag">${tag}</span>`)
         .join("");
     }
 
-    function getMixSummary(mainType, secondType, scores) {
-      const total = questions.length;
-      const mainPct = Math.round((scores[mainType] / total) * 100);
-      const secondPct = Math.round((scores[secondType] / total) * 100);
-
-      if (scores[mainType] === scores[secondType]) {
-        return `你的結果呈現 <span class="highlight">${discData[mainType].title}</span> 與 <span class="highlight">${discData[secondType].title}</span> 並列傾向，表示你在不同情境下，可能會同時展現兩種風格。這不是矛盾，而是代表你有較高的彈性。`;
-      }
-
-      return `你的主要傾向是 <span class="highlight">${discData[mainType].title}</span>（${mainPct}%），次高傾向是 <span class="highlight">${discData[secondType].title}</span>（${secondPct}%）。這代表你的核心風格以 ${discData[mainType].title.replace("型","")} 為主，但在某些情境下，也會帶有 ${discData[secondType].title.replace("型","")} 的表現方式。`;
+    function getMergedField(types, fieldName) {
+      return mergeUniqueArrays(types.map(type => discData[type][fieldName]));
     }
 
-    function getSecondarySummary(secondType) {
-      return `你的次高傾向為 ${discData[secondType].title}。這表示除了主要風格外，你也可能在特定情境下展現出這類型的特徵，例如工作壓力、團隊角色不同、或任務需求不同時，會更明顯地浮現這種行為模式。`;
+    function buildMainSummary(mainTypes) {
+      if (mainTypes.length === 1) {
+        return discData[mainTypes[0]].mainSummary;
+      }
+
+      return `你的主要傾向呈現並列狀態，包含 ${formatTypeTitles(mainTypes)}。這表示你在不同情境下，可能同時展現多種行為風格，不是單一路線直衝到底，而是像工具箱裡放了兩把以上的扳手，會依任務需求切換使用。`;
+    }
+
+    function buildTypeDesc(mainTypes) {
+      if (mainTypes.length === 1) {
+        return discData[mainTypes[0]].desc;
+      }
+
+      return `你的最高分傾向有 ${mainTypes.length} 種並列，分別是 ${formatTypeTitles(mainTypes)}。這代表你的行為模式較具彈性，會依照工作情境、人際互動與壓力狀態展現不同面向。`;
+    }
+
+    function buildSecondarySummary(secondTypes, secondScore, total) {
+      if (!secondTypes || secondTypes.length === 0) {
+        return "此次測驗沒有明確的次高傾向，代表分數高度集中在主要傾向上。";
+      }
+
+      const pct = Math.round((secondScore / total) * 100);
+
+      if (secondTypes.length === 1) {
+        return `你的次高傾向為 ${discData[secondTypes[0]].title}，約佔 ${pct}%。這表示除了主要風格外，你在某些情境下也可能展現出這類型的特徵。`;
+      }
+
+      return `你的次高傾向共有 ${secondTypes.length} 種並列，分別是 ${formatTypeTitles(secondTypes)}，各自約佔 ${pct}%。這表示除了主要傾向外，你也保有多方向的應對彈性。`;
+    }
+
+    function buildMixSummary(mainGroup, secondGroup, total) {
+      const mainTypes = mainGroup.types;
+      const mainPct = Math.round((mainGroup.score / total) * 100);
+
+      if (!secondGroup) {
+        return `你的分數高度集中在 <span class="highlight">${formatTypeTitles(mainTypes)}</span>，約為 ${mainPct}%。代表你的核心風格非常明確，平常面對事情時，多半會以這類型的方式來思考、回應與行動。`;
+      }
+
+      const secondTypes = secondGroup.types;
+      const secondPct = Math.round((secondGroup.score / total) * 100);
+
+      if (mainTypes.length > 1) {
+        return `你的主要傾向呈現並列，包含 <span class="highlight">${formatTypeTitles(mainTypes)}</span>，各自約為 ${mainPct}%。次高傾向則為 <span class="highlight">${formatTypeTitles(secondTypes)}</span>，約為 ${secondPct}%。這代表你不是單一型態，而是會在不同情境中切換不同風格。`;
+      }
+
+      if (secondTypes.length > 1) {
+        return `你的主要傾向是 <span class="highlight">${formatTypeTitles(mainTypes)}</span>（${mainPct}%），而次高傾向有並列，包含 <span class="highlight">${formatTypeTitles(secondTypes)}</span>（各約 ${secondPct}%）。這表示你有明確主軸，但也同時具備多種輔助風格。`;
+      }
+
+      return `你的主要傾向是 <span class="highlight">${formatTypeTitles(mainTypes)}</span>（${mainPct}%），次高傾向是 <span class="highlight">${formatTypeTitles(secondTypes)}</span>（${secondPct}%）。這表示你的核心風格以 ${formatPlainTypeNames(mainTypes)} 為主，但在某些情境下，也會帶有 ${formatPlainTypeNames(secondTypes)} 的表現方式。`;
     }
 
     function calculateDISC() {
@@ -753,10 +844,11 @@
       }
 
       const total = questions.length;
-      const sortedTypes = getSortedTypes(scores);
-      const mainType = sortedTypes[0];
-      const secondType = sortedTypes[1];
-      const data = discData[mainType];
+      const rankGroups = getRankGroups(scores);
+      const mainGroup = rankGroups[0];
+      const secondGroup = rankGroups[1] || null;
+      const mainTypes = mainGroup.types;
+      const secondTypes = secondGroup ? secondGroup.types : [];
 
       document.getElementById("scoreD").textContent = scores.D;
       document.getElementById("scoreI").textContent = scores.I;
@@ -769,22 +861,23 @@
         document.getElementById(`pct${type}`).textContent = pct + "%";
       });
 
-      const badge = document.getElementById("typeBadge");
-      badge.textContent = data.title;
-      badge.className = `type-badge ${data.badgeClass}`;
+      renderBadges(mainTypes);
+      document.getElementById("typeDesc").textContent = buildTypeDesc(mainTypes);
+      document.getElementById("mainSummary").textContent = buildMainSummary(mainTypes);
 
-      document.getElementById("typeDesc").textContent = data.desc;
-      document.getElementById("mainSummary").textContent = data.mainSummary;
+      renderList("strengthList", getMergedField(mainTypes, "strengths"));
+      renderList("weaknessList", getMergedField(mainTypes, "weaknesses"));
+      renderList("adviceList", getMergedField(mainTypes, "advice"));
+      renderList("communicationList", getMergedField(mainTypes, "communication"));
 
-      renderList("strengthList", data.strengths);
-      renderList("weaknessList", data.weaknesses);
-      renderList("adviceList", data.advice);
-      renderList("communicationList", data.communication);
-      renderInteractionTips(mainType);
-      renderRoleTags(mainType);
+      renderInteractionTips(mainTypes);
+      renderRoleTags(mainTypes);
 
-      document.getElementById("secondarySummary").textContent = getSecondarySummary(secondType);
-      document.getElementById("mixSummary").innerHTML = getMixSummary(mainType, secondType, scores);
+      document.getElementById("secondarySummary").textContent =
+        buildSecondarySummary(secondTypes, secondGroup ? secondGroup.score : 0, total);
+
+      document.getElementById("mixSummary").innerHTML =
+        buildMixSummary(mainGroup, secondGroup, total);
 
       resultBox.style.display = "block";
       resultBox.scrollIntoView({ behavior: "smooth" });
@@ -792,14 +885,14 @@
 
     function resetResult() {
       resultBox.style.display = "none";
+
       ["D", "I", "S", "C"].forEach(type => {
         document.getElementById(`bar${type}`).style.width = "0%";
         document.getElementById(`pct${type}`).textContent = "0%";
         document.getElementById(`score${type}`).textContent = "0";
       });
 
-      document.getElementById("typeBadge").textContent = "";
-      document.getElementById("typeBadge").className = "type-badge";
+      document.getElementById("typeBadgeWrap").innerHTML = "";
       document.getElementById("typeDesc").textContent = "";
       document.getElementById("mainSummary").textContent = "";
       document.getElementById("secondarySummary").textContent = "";
