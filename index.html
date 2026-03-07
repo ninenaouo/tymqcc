@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DISC 快速測驗</title>
+  <title>DISC 傾向分析測驗</title>
   <style>
     * { box-sizing: border-box; }
 
@@ -12,30 +12,46 @@
       font-family: "Segoe UI", "Noto Sans TC", sans-serif;
       background: #f5f7fb;
       color: #1f2937;
-      line-height: 1.6;
+      line-height: 1.7;
     }
 
     .wrap {
-      max-width: 920px;
+      max-width: 1040px;
       margin: 32px auto;
       padding: 20px;
     }
 
     .card {
-      background: #fff;
+      background: #ffffff;
       border-radius: 18px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
       padding: 24px;
       margin-bottom: 20px;
     }
 
-    h1, h2 {
+    h1, h2, h3 {
       margin-top: 0;
+      color: #111827;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
     }
 
     .desc {
       color: #4b5563;
-      margin-bottom: 16px;
+      margin-bottom: 10px;
     }
 
     .hint {
@@ -52,8 +68,7 @@
     }
 
     .question h3 {
-      margin: 0 0 12px;
-      font-size: 18px;
+      margin-bottom: 12px;
     }
 
     .options {
@@ -120,19 +135,24 @@
 
     .type-badge {
       display: inline-block;
-      padding: 8px 14px;
+      padding: 10px 16px;
       border-radius: 999px;
       font-weight: 700;
-      margin-bottom: 12px;
-      background: #111827;
+      margin-bottom: 14px;
       color: #fff;
+      font-size: 18px;
     }
+
+    .badge-d { background: #dc2626; }
+    .badge-i { background: #d97706; }
+    .badge-s { background: #059669; }
+    .badge-c { background: #2563eb; }
 
     .score-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 12px;
-      margin: 16px 0;
+      margin: 18px 0;
     }
 
     .score-box {
@@ -144,12 +164,12 @@
 
     .score-box strong {
       display: block;
-      font-size: 26px;
+      font-size: 28px;
       margin-top: 6px;
     }
 
     .bar-wrap {
-      margin-top: 16px;
+      margin-top: 14px;
       display: grid;
       gap: 10px;
     }
@@ -173,7 +193,7 @@
       height: 100%;
       width: 0;
       border-radius: 999px;
-      transition: width 0.4s ease;
+      transition: width 0.45s ease;
     }
 
     .d { background: #ef4444; }
@@ -181,9 +201,70 @@
     .s { background: #10b981; }
     .c { background: #3b82f6; }
 
-    @media (max-width: 640px) {
-      .score-grid {
-        grid-template-columns: repeat(2, 1fr);
+    .section-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .info-box {
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 16px;
+      background: #fafafa;
+    }
+
+    .info-box ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .info-box li {
+      margin-bottom: 8px;
+    }
+
+    .sub-info {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 14px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .small-note {
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .highlight {
+      color: #111827;
+      font-weight: 700;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      color: #111827;
+      font-size: 13px;
+      margin-right: 6px;
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .score-grid,
+      .section-grid,
+      .two-col {
+        grid-template-columns: 1fr;
       }
 
       .wrap {
@@ -194,17 +275,23 @@
       .card {
         padding: 16px;
       }
+
+      h1 {
+        font-size: 26px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card">
-      <h1>DISC 快速測驗</h1>
+      <h1>DISC 傾向分析測驗</h1>
       <p class="desc">
-        每題選擇一個最像你的選項。全部作答後按下「查看結果」，系統會自動計算你的 DISC 傾向。
+        每題請選擇一個最符合你平常表現的選項。完成後可看到你的主要 DISC 傾向、優缺點、成長建議，以及與其他類型溝通時要注意的地方。
       </p>
-      <p class="hint">D = 主導型、I = 影響型、S = 穩定型、C = 謹慎型</p>
+      <p class="hint">
+        D = 主導型、I = 影響型、S = 穩定型、C = 謹慎型
+      </p>
     </div>
 
     <form id="discForm" class="card"></form>
@@ -241,6 +328,51 @@
           <span>C</span>
           <div class="bar"><span id="barC" class="c"></span></div>
           <span id="pctC">0%</span>
+        </div>
+      </div>
+
+      <div class="sub-info">
+        <h3>你的主要傾向</h3>
+        <p id="mainSummary"></p>
+        <div id="roleTags"></div>
+      </div>
+
+      <div class="section-grid">
+        <div class="info-box">
+          <h3>優點</h3>
+          <ul id="strengthList"></ul>
+        </div>
+        <div class="info-box">
+          <h3>可能盲點 / 缺點</h3>
+          <ul id="weaknessList"></ul>
+        </div>
+      </div>
+
+      <div class="section-grid">
+        <div class="info-box">
+          <h3>給這類型的建議</h3>
+          <ul id="adviceList"></ul>
+        </div>
+        <div class="info-box">
+          <h3>溝通風格提醒</h3>
+          <ul id="communicationList"></ul>
+        </div>
+      </div>
+
+      <div class="sub-info">
+        <h3>與其他類型互動時要注意</h3>
+        <div id="interactionTips"></div>
+      </div>
+
+      <div class="two-col">
+        <div class="info-box">
+          <h3>次高傾向分析</h3>
+          <p id="secondarySummary"></p>
+        </div>
+        <div class="info-box">
+          <h3>整體判讀</h3>
+          <p id="mixSummary"></p>
+          <p class="small-note">提醒：DISC 反映的是行為傾向，不代表能力高低，也不是固定不變的人格標籤。</p>
         </div>
       </div>
     </div>
@@ -367,22 +499,170 @@
       }
     ];
 
-    const resultMap = {
+    const discData = {
       D: {
         title: "D 主導型",
-        desc: "你偏向目標導向、行動快速、喜歡掌握主導權。面對任務時，常會直接切進核心，追求效率與結果。"
+        badgeClass: "badge-d",
+        desc: "你偏向目標導向、決策快速、行動力強。遇到事情時容易先抓重點、先推進，重視效率、成果與掌控感。",
+        mainSummary: "你通常是敢扛責任、願意衝在前面的類型。當團隊卡住時，你常會想直接切進問題核心，推動事情往前走。你適合處理需要決斷、突破與推進的任務。",
+        strengths: [
+          "行動快，遇到事情不容易拖延",
+          "具決斷力，敢在壓力下做選擇",
+          "目標感明確，重視結果與效率",
+          "面對挑戰時通常不怕扛責任",
+          "在混亂或停滯時能推動團隊前進"
+        ],
+        weaknesses: [
+          "容易太急，忽略他人的感受或節奏",
+          "可能因追求效率而跳過細節",
+          "不耐煩於重複溝通或慢節奏流程",
+          "有時會給人強勢或壓迫感",
+          "當結果不如預期時，容易顯得急躁"
+        ],
+        advice: [
+          "在推動事情前，先花一點時間確認團隊是否跟得上",
+          "學會把『快』和『穩』搭配，而不是只追求速度",
+          "遇到不同意見時，先聽完再判斷，能減少不必要摩擦",
+          "多留意細節與風險，能讓執行更完整",
+          "把命令改成邀請，會讓團隊更願意配合"
+        ],
+        communication: [
+          "說明事情時可直接、明確，但避免太硬",
+          "先講結論，再補充原因，效果通常最好",
+          "若對方偏慢或偏保守，請留給對方思考時間",
+          "多用『我們一起怎麼做』，少用單向要求",
+          "你越願意聽，別人越願意跟"
+        ],
+        interactions: {
+          D: "與 D 型互動時，雙方都想掌控局面，容易硬碰硬。建議直接、簡潔溝通，聚焦目標，不要陷入面子之爭。",
+          I: "與 I 型互動時，對方重氣氛與熱情。你要避免太冷硬或只談結果，適度回應對方想法，合作會更順。",
+          S: "與 S 型互動時，請放慢一點節奏。對方重視穩定與安全感，若太急、太強勢，對方容易退縮。",
+          C: "與 C 型互動時，請準備事實、邏輯與細節。若只講速度不講依據，對方不容易被說服。"
+        },
+        roles: ["適合擔任帶頭推進者", "適合負責決策與行動突破", "適合在時程壓力高的情境領導前進"]
       },
       I: {
         title: "I 影響型",
-        desc: "你偏向外向熱情、重視互動、善於鼓舞氣氛。你常透過溝通與感染力影響團隊。"
+        badgeClass: "badge-i",
+        desc: "你偏向熱情外向、善於互動，重視人際連結與現場氣氛。你常透過鼓舞、分享與交流來影響團隊。",
+        mainSummary: "你通常是能讓團隊氣氛活起來的人。你擅長連結人心、帶動參與感，也很適合在需要表達、說服與建立合作的情境發揮。",
+        strengths: [
+          "表達力佳，能帶動氣氛與互動",
+          "親和力高，容易拉近人與人的距離",
+          "善於鼓勵他人，能提升團隊參與感",
+          "創意與點子較多，願意嘗試新方法",
+          "在溝通、簡報、協調上通常有優勢"
+        ],
+        weaknesses: [
+          "有時會太重感覺，忽略細節與落實",
+          "容易分心，對重複性高的事情耐性較低",
+          "可能因過度樂觀而低估困難",
+          "有時說得多、做得少，需要加強執行閉環",
+          "遇到結構化要求時可能覺得受限制"
+        ],
+        advice: [
+          "把你的熱情和行動計畫綁在一起，效果會更強",
+          "有好點子時，也要記得安排後續追蹤",
+          "練習把事情說清楚、寫清楚，能提升可信度",
+          "注意不要只顧氣氛，也要兼顧準確與進度",
+          "學會在熱情之外建立穩定節奏"
+        ],
+        communication: [
+          "你的優勢在於親和與感染力，可多運用在說服與協調",
+          "遇到重細節的人時，要補上邏輯與資料",
+          "說明事情時可先拉近關係，再進入重點",
+          "別讓話題飄太遠，記得回到行動結論",
+          "適時確認對方是否真正理解，而不只是氣氛不錯"
+        ],
+        interactions: {
+          D: "與 D 型互動時，請盡量講重點，不要繞太多。對方重效率，若太發散，容易被打斷。",
+          I: "與 I 型互動時，氣氛通常很好，但容易兩人都很有想法卻缺少收尾，建議明確分工。",
+          S: "與 S 型互動時，請避免節奏太跳。對方需要穩定與安心，你的熱情若能搭配耐心，效果很好。",
+          C: "與 C 型互動時，要注意精準與依據。若只靠感覺或口才，對方不一定買單。"
+        },
+        roles: ["適合擔任溝通協調者", "適合負責簡報與推廣", "適合活絡團隊並促進跨部門合作"]
       },
       S: {
         title: "S 穩定型",
-        desc: "你偏向溫和穩定、重視合作與支持。你常是團隊裡讓事情安穩推進的重要力量。"
+        badgeClass: "badge-s",
+        desc: "你偏向溫和、穩定、重視合作，通常會先考慮團隊節奏與他人感受。你擅長支持、協助與維持整體穩定。",
+        mainSummary: "你通常是團隊中安定而可靠的力量。你不一定最搶眼，但常是最能把事情穩穩接住、讓大家安心往前走的人。",
+        strengths: [
+          "穩定可靠，做事有一致性",
+          "重視合作，願意支援團隊",
+          "有耐心，能維持長期推進",
+          "同理心較高，能照顧他人感受",
+          "不容易躁進，適合維持流程穩定"
+        ],
+        weaknesses: [
+          "面對改變時，適應速度可能較慢",
+          "有時太顧全他人，忽略自己立場",
+          "不喜歡衝突，可能把問題放著不說",
+          "做決定時可能猶豫，怕影響和諧",
+          "在需要快速表態時容易顯得保守"
+        ],
+        advice: [
+          "你可以更相信自己的判斷，不必總是退讓",
+          "適時表達真實想法，反而有助於團隊進步",
+          "遇到變動時，把它拆成小步驟，會更容易適應",
+          "練習在和諧之外，適度設定界線與立場",
+          "你的穩定是優勢，不代表不能更有主動性"
+        ],
+        communication: [
+          "你擅長傾聽，但也要記得表達自己的需求",
+          "在需要說明立場時，可先肯定對方，再提出看法",
+          "若面對強勢對象，建議準備具體例子來支持自己",
+          "不要把沉默當成配合，有時適度回應更重要",
+          "用穩定節奏溝通，是你的強項"
+        ],
+        interactions: {
+          D: "與 D 型互動時，對方節奏快、要求直接。請不要因壓力而只說『好』，必要時要清楚表達實際情況。",
+          I: "與 I 型互動時，對方熱情外放。若你覺得太快，可主動幫忙把想法整理成可執行步驟。",
+          S: "與 S 型互動時，合作通常很順，但也可能彼此都太客氣，重要議題要避免都不先說。",
+          C: "與 C 型互動時，對方重邏輯與細節。你若能先整理事實，再說明感受，會更有效。"
+        },
+        roles: ["適合擔任穩定執行者", "適合維持團隊合作氛圍", "適合支援協調與流程落地"]
       },
       C: {
         title: "C 謹慎型",
-        desc: "你偏向理性細緻、重視規則與正確性。你習慣先分析再行動，擅長把關品質與風險。"
+        badgeClass: "badge-c",
+        desc: "你偏向理性、重視細節與正確性，做事講求依據、邏輯與品質。你常在風險控管、資料整理與品質把關上發揮優勢。",
+        mainSummary: "你通常是團隊裡最能看見細節、抓出問題與維持品質的人。你適合面對需要準確、規範與分析能力的工作情境。",
+        strengths: [
+          "細心嚴謹，重視正確與品質",
+          "擅長分析、整理與釐清問題",
+          "能發現別人忽略的風險或漏洞",
+          "做事有依據，不容易衝動決定",
+          "在需要標準化與控管的任務中表現穩定"
+        ],
+        weaknesses: [
+          "可能因要求高而顯得龜毛或挑剔",
+          "有時過度謹慎，導致行動偏慢",
+          "容易卡在細節，影響整體推進速度",
+          "對不明確或變動快的環境較不自在",
+          "若壓力大時，可能傾向批判而非鼓勵"
+        ],
+        advice: [
+          "先求完成，再求完美，能提升整體效率",
+          "不是所有細節都要一次做到滿分，學會抓優先順序",
+          "當需要合作時，請把你的標準翻譯成別人聽得懂的語言",
+          "適度接受不完美，會讓你推進得更遠",
+          "你的精準是武器，但也要留空間給彈性"
+        ],
+        communication: [
+          "你很適合用事實、條理與結構說明事情",
+          "但面對重感受的人時，可先顧及語氣與接受度",
+          "指出問題時，最好一併提出建議方案",
+          "避免只講哪裡不行，也要說怎麼改更好",
+          "你的邏輯越清楚，說服力就越強"
+        ],
+        interactions: {
+          D: "與 D 型互動時，請先講重點再講細節。對方重效率，若太長篇鋪陳，容易失去耐心。",
+          I: "與 I 型互動時，對方較重感受與創意。你要避免太快否定，先接住想法再一起收斂。",
+          S: "與 S 型互動時，請注意語氣不要太硬。對方重關係與和諧，過度批判會讓對方退縮。",
+          C: "與 C 型互動時，彼此通常能理解邏輯，但也可能因都太要求完美而拖慢進度，記得設下決策點。"
+        },
+        roles: ["適合擔任分析與把關者", "適合負責資料、品質與風險控管", "適合支援制度化與標準化工作"]
       }
     };
 
@@ -412,6 +692,54 @@
         `;
     }
 
+    function getSortedTypes(scores) {
+      return Object.keys(scores).sort((a, b) => {
+        if (scores[b] !== scores[a]) return scores[b] - scores[a];
+        return "DISC".indexOf(a) - "DISC".indexOf(b);
+      });
+    }
+
+    function renderList(elementId, items) {
+      const el = document.getElementById(elementId);
+      el.innerHTML = items.map(item => `<li>${item}</li>`).join("");
+    }
+
+    function renderInteractionTips(mainType) {
+      const tips = discData[mainType].interactions;
+      const html = `
+        <div class="info-box" style="margin-top: 10px;">
+          <p><span class="highlight">遇到 D 主導型：</span>${tips.D}</p>
+          <p><span class="highlight">遇到 I 影響型：</span>${tips.I}</p>
+          <p><span class="highlight">遇到 S 穩定型：</span>${tips.S}</p>
+          <p><span class="highlight">遇到 C 謹慎型：</span>${tips.C}</p>
+        </div>
+      `;
+      document.getElementById("interactionTips").innerHTML = html;
+    }
+
+    function renderRoleTags(mainType) {
+      const tags = discData[mainType].roles;
+      document.getElementById("roleTags").innerHTML = tags
+        .map(tag => `<span class="tag">${tag}</span>`)
+        .join("");
+    }
+
+    function getMixSummary(mainType, secondType, scores) {
+      const total = questions.length;
+      const mainPct = Math.round((scores[mainType] / total) * 100);
+      const secondPct = Math.round((scores[secondType] / total) * 100);
+
+      if (scores[mainType] === scores[secondType]) {
+        return `你的結果呈現 <span class="highlight">${discData[mainType].title}</span> 與 <span class="highlight">${discData[secondType].title}</span> 並列傾向，表示你在不同情境下，可能會同時展現兩種風格。這不是矛盾，而是代表你有較高的彈性。`;
+      }
+
+      return `你的主要傾向是 <span class="highlight">${discData[mainType].title}</span>（${mainPct}%），次高傾向是 <span class="highlight">${discData[secondType].title}</span>（${secondPct}%）。這代表你的核心風格以 ${discData[mainType].title.replace("型","")} 為主，但在某些情境下，也會帶有 ${discData[secondType].title.replace("型","")} 的表現方式。`;
+    }
+
+    function getSecondarySummary(secondType) {
+      return `你的次高傾向為 ${discData[secondType].title}。這表示除了主要風格外，你也可能在特定情境下展現出這類型的特徵，例如工作壓力、團隊角色不同、或任務需求不同時，會更明顯地浮現這種行為模式。`;
+    }
+
     function calculateDISC() {
       const scores = { D: 0, I: 0, S: 0, C: 0 };
 
@@ -425,11 +753,10 @@
       }
 
       const total = questions.length;
-
-      const topType = Object.keys(scores).sort((a, b) => {
-        if (scores[b] !== scores[a]) return scores[b] - scores[a];
-        return "DISC".indexOf(a) - "DISC".indexOf(b);
-      })[0];
+      const sortedTypes = getSortedTypes(scores);
+      const mainType = sortedTypes[0];
+      const secondType = sortedTypes[1];
+      const data = discData[mainType];
 
       document.getElementById("scoreD").textContent = scores.D;
       document.getElementById("scoreI").textContent = scores.I;
@@ -442,8 +769,22 @@
         document.getElementById(`pct${type}`).textContent = pct + "%";
       });
 
-      document.getElementById("typeBadge").textContent = resultMap[topType].title;
-      document.getElementById("typeDesc").textContent = resultMap[topType].desc;
+      const badge = document.getElementById("typeBadge");
+      badge.textContent = data.title;
+      badge.className = `type-badge ${data.badgeClass}`;
+
+      document.getElementById("typeDesc").textContent = data.desc;
+      document.getElementById("mainSummary").textContent = data.mainSummary;
+
+      renderList("strengthList", data.strengths);
+      renderList("weaknessList", data.weaknesses);
+      renderList("adviceList", data.advice);
+      renderList("communicationList", data.communication);
+      renderInteractionTips(mainType);
+      renderRoleTags(mainType);
+
+      document.getElementById("secondarySummary").textContent = getSecondarySummary(secondType);
+      document.getElementById("mixSummary").innerHTML = getMixSummary(mainType, secondType, scores);
 
       resultBox.style.display = "block";
       resultBox.scrollIntoView({ behavior: "smooth" });
@@ -451,20 +792,24 @@
 
     function resetResult() {
       resultBox.style.display = "none";
-      document.getElementById("barD").style.width = "0%";
-      document.getElementById("barI").style.width = "0%";
-      document.getElementById("barS").style.width = "0%";
-      document.getElementById("barC").style.width = "0%";
-      document.getElementById("pctD").textContent = "0%";
-      document.getElementById("pctI").textContent = "0%";
-      document.getElementById("pctS").textContent = "0%";
-      document.getElementById("pctC").textContent = "0%";
-      document.getElementById("scoreD").textContent = "0";
-      document.getElementById("scoreI").textContent = "0";
-      document.getElementById("scoreS").textContent = "0";
-      document.getElementById("scoreC").textContent = "0";
+      ["D", "I", "S", "C"].forEach(type => {
+        document.getElementById(`bar${type}`).style.width = "0%";
+        document.getElementById(`pct${type}`).textContent = "0%";
+        document.getElementById(`score${type}`).textContent = "0";
+      });
+
       document.getElementById("typeBadge").textContent = "";
+      document.getElementById("typeBadge").className = "type-badge";
       document.getElementById("typeDesc").textContent = "";
+      document.getElementById("mainSummary").textContent = "";
+      document.getElementById("secondarySummary").textContent = "";
+      document.getElementById("mixSummary").textContent = "";
+      document.getElementById("strengthList").innerHTML = "";
+      document.getElementById("weaknessList").innerHTML = "";
+      document.getElementById("adviceList").innerHTML = "";
+      document.getElementById("communicationList").innerHTML = "";
+      document.getElementById("interactionTips").innerHTML = "";
+      document.getElementById("roleTags").innerHTML = "";
     }
 
     renderQuestions();
